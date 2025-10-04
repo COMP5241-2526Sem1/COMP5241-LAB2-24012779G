@@ -12,10 +12,27 @@ class NoteTaker {
     }
 
     bindEvents() {
-        document.getElementById('newNoteBtn').addEventListener('click', () => this.createNewNote());
-        document.getElementById('saveBtn').addEventListener('click', () => this.saveNote());
-        document.getElementById('deleteBtn').addEventListener('click', () => this.deleteNote());
-        document.getElementById('searchInput').addEventListener('input', (e) => this.searchNotes(e.target.value));
+        const elements = {
+            newNoteBtn: document.getElementById('newNoteBtn'),
+            saveBtn: document.getElementById('saveBtn'),
+            deleteBtn: document.getElementById('deleteBtn'),
+            searchInput: document.getElementById('searchInput'),
+            noteTitle: document.getElementById('noteTitle'),
+            noteContent: document.getElementById('noteContent')
+        };
+
+        // Check if all required elements exist
+        for (const [name, element] of Object.entries(elements)) {
+            if (!element) {
+                console.warn(`${name} element not found`);
+                return;
+            }
+        }
+
+        elements.newNoteBtn.addEventListener('click', () => this.createNewNote());
+        elements.saveBtn.addEventListener('click', () => this.saveNote());
+        elements.deleteBtn.addEventListener('click', () => this.deleteNote());
+        elements.searchInput.addEventListener('input', (e) => this.searchNotes(e.target.value));
         
         // Auto-save on content change (debounced)
         let saveTimeout;
@@ -28,8 +45,8 @@ class NoteTaker {
             }, 2000);
         };
         
-        document.getElementById('noteTitle').addEventListener('input', autoSave);
-        document.getElementById('noteContent').addEventListener('input', autoSave);
+        elements.noteTitle.addEventListener('input', autoSave);
+        elements.noteContent.addEventListener('input', autoSave);
     }
 
     async loadNotes() {
@@ -52,6 +69,10 @@ class NoteTaker {
 
     renderNotesList() {
         const notesList = document.getElementById('notesList');
+        if (!notesList) {
+            console.warn('notesList element not found');
+            return;
+        }
         
         if (this.notes.length === 0) {
             notesList.innerHTML = '<div class="empty-state"><p>No notes yet. Create your first note!</p></div>';
@@ -284,6 +305,10 @@ class NoteTaker {
 
     showMessage(message, type) {
         const messageArea = document.getElementById('messageArea');
+        if (!messageArea) {
+            console.warn('messageArea element not found');
+            return;
+        }
         messageArea.innerHTML = `<div class="${type}">${message}</div>`;
         
         if (type === 'success') {
@@ -292,7 +317,12 @@ class NoteTaker {
     }
 
     hideMessage() {
-        document.getElementById('messageArea').innerHTML = '';
+        const messageArea = document.getElementById('messageArea');
+        if (!messageArea) {
+            console.warn('messageArea element not found');
+            return;
+        }
+        messageArea.innerHTML = '';
     }
 
     escapeHtml(text) {
