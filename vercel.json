@@ -19,9 +19,10 @@
   "env": {
     "PYTHONPATH": "."
   },
-  "functions": {
-    "api/index.py": {
-      "runtime": "@vercel/python"
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "staging": true
     }
   }
 }
