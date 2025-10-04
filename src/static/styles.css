@@ -77,6 +77,22 @@ body {
     gap: 12px;
 }
 
+/* Mobile menu button - hidden by default */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+}
+
+.mobile-menu-btn:hover {
+    background: var(--background-color);
+}
+
 /* Sidebar */
 .sidebar {
     width: 320px;
@@ -721,30 +737,68 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        position: fixed;
-        left: -100%;
-        top: 60px;
-        z-index: 998;
-        transition: left 0.3s ease;
+    .app-container {
+        flex-direction: column;
     }
 
-    .sidebar.show {
+    .app-header {
+        padding: 0 16px;
+        z-index: 1001;
+    }
+
+    .header-actions .action-btn {
+        display: none; /* Hide desktop actions on mobile */
+    }
+
+    .mobile-menu-btn {
+        display: block; /* Show mobile menu button */
+    }
+
+    .sidebar {
+        width: 280px;
+        height: calc(100vh - 60px);
+        position: fixed;
+        left: -280px;
+        top: 60px;
+        z-index: 1000;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: var(--surface-color);
+        border-right: 1px solid var(--border-color);
+        box-shadow: var(--shadow-lg);
+        overflow-y: auto;
+    }
+
+    .sidebar.mobile-show {
         left: 0;
     }
 
     .main-content {
         width: 100%;
+        margin-top: 60px;
+        padding: 0;
+    }
+
+    .editor-container {
+        padding: 16px;
+        height: calc(100vh - 60px);
+        overflow-y: auto;
     }
 
     .suggestions-panel {
         width: 100%;
-        right: -100%;
+        height: 60vh;
+        position: fixed;
+        bottom: -60vh;
+        right: 0;
+        left: 0;
+        top: auto;
+        z-index: 999;
+        transition: bottom 0.3s ease;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     }
 
-    .app-header {
-        padding: 0 16px;
+    .suggestions-panel.show {
+        bottom: 0;
     }
 
     .editor-header {
@@ -757,11 +811,70 @@ body {
     .editor-actions {
         justify-content: center;
         flex-wrap: wrap;
+        gap: 8px;
     }
 
     .action-btn {
         flex: 1;
-        min-width: 120px;
+        min-width: 100px;
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .form-input,
+    .form-textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    .note-item {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+
+    .note-title {
+        font-size: 14px;
+    }
+
+    .note-preview {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .modal-content {
+        margin: 20px;
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+    }
+
+    .message {
+        top: 70px;
+        right: 10px;
+        left: 10px;
+        transform: translate(-50%, -50%) scale(0.8);
+        max-width: none;
+    }
+
+    .message.show {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Mobile overlay to close sidebar */
+    .mobile-overlay {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-overlay.show {
+        opacity: 1;
+        visibility: visible;
     }
 }
 

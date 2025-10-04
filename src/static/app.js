@@ -8,7 +8,76 @@ class NoteTaker {
 
     async init() {
         this.bindEvents();
+        this.initMobileMenu();
         await this.loadNotes();
+    }
+
+    initMobileMenu() {
+        // Add mobile menu toggle functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.querySelector('.sidebar');
+        const body = document.body;
+        
+        if (mobileMenuBtn && sidebar) {
+            // Create mobile overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'mobile-overlay';
+            body.appendChild(overlay);
+
+            // Toggle sidebar on menu button click
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.toggleMobileSidebar();
+            });
+
+            // Close sidebar when clicking overlay
+            overlay.addEventListener('click', () => {
+                this.closeMobileSidebar();
+            });
+
+            // Close sidebar when note is selected on mobile
+            sidebar.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768 && e.target.closest('.note-item')) {
+                    setTimeout(() => this.closeMobileSidebar(), 200);
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    this.closeMobileSidebar();
+                }
+            });
+        }
+    }
+
+    toggleMobileSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.mobile-overlay');
+        
+        if (sidebar && overlay) {
+            const isOpen = sidebar.classList.contains('mobile-show');
+            
+            if (isOpen) {
+                this.closeMobileSidebar();
+            } else {
+                sidebar.classList.add('mobile-show');
+                overlay.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        }
+    }
+
+    closeMobileSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.mobile-overlay');
+        
+        if (sidebar && overlay) {
+            sidebar.classList.remove('mobile-show');
+            overlay.classList.remove('show');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
     }
 
     bindEvents() {
