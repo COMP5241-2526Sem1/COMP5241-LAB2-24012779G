@@ -309,11 +309,30 @@ class NoteTaker {
             console.warn('messageArea element not found');
             return;
         }
-        messageArea.innerHTML = `<div class="${type}">${message}</div>`;
         
-        if (type === 'success') {
-            setTimeout(() => this.hideMessage(), 3000);
-        }
+        // Create message element with proper styling
+        const messageElement = document.createElement('div');
+        messageElement.className = `message ${type}`;
+        messageElement.textContent = message;
+        
+        // Clear any existing messages
+        messageArea.innerHTML = '';
+        messageArea.appendChild(messageElement);
+        
+        // Trigger show animation
+        setTimeout(() => {
+            messageElement.classList.add('show');
+        }, 10);
+        
+        // Auto-hide after 3 seconds for all message types
+        setTimeout(() => {
+            messageElement.classList.remove('show');
+            setTimeout(() => {
+                if (messageElement.parentNode) {
+                    messageElement.remove();
+                }
+            }, 300); // Wait for fade out animation
+        }, 3000);
     }
 
     hideMessage() {
@@ -322,7 +341,17 @@ class NoteTaker {
             console.warn('messageArea element not found');
             return;
         }
-        messageArea.innerHTML = '';
+        
+        // Find all message elements and remove them
+        const messages = messageArea.querySelectorAll('.message');
+        messages.forEach(message => {
+            message.classList.remove('show');
+            setTimeout(() => {
+                if (message.parentNode) {
+                    message.remove();
+                }
+            }, 300);
+        });
     }
 
     escapeHtml(text) {
