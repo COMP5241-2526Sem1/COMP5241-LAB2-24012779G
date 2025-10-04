@@ -298,6 +298,59 @@ body {
     border-color: var(--error-color);
 }
 
+/* Modal Buttons */
+.btn-modal {
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 120px;
+    text-transform: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-modal.primary {
+    background: linear-gradient(135deg, var(--primary-color), #1d4ed8);
+    color: white;
+    border: 1px solid transparent;
+}
+
+.btn-modal.primary:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.btn-modal.secondary {
+    background: var(--surface-color);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-modal.secondary:hover {
+    background: var(--background-color);
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Modal Actions Container */
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
 .editor-container {
     flex: 1;
     padding: 24px;
