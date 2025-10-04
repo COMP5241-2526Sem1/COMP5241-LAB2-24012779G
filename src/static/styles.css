@@ -737,8 +737,15 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    body {
+        overflow: auto;
+    }
+
     .app-container {
         flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
     }
 
     .app-header {
@@ -776,12 +783,24 @@ body {
         width: 100%;
         margin-top: 60px;
         padding: 0;
+        height: calc(100vh - 60px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     }
 
     .editor-container {
         padding: 16px;
-        height: calc(100vh - 60px);
-        overflow-y: auto;
+        min-height: calc(100vh - 60px);
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .form-textarea {
+        min-height: 200px !important;
+        max-height: none;
+        resize: vertical;
     }
 
     .suggestions-panel {

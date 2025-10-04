@@ -64,7 +64,10 @@ class NoteTaker {
             } else {
                 sidebar.classList.add('mobile-show');
                 overlay.classList.add('show');
-                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                // Only prevent scrolling on mobile when sidebar is open
+                if (window.innerWidth <= 768) {
+                    document.body.style.overflow = 'hidden';
+                }
             }
         }
     }
@@ -76,7 +79,10 @@ class NoteTaker {
         if (sidebar && overlay) {
             sidebar.classList.remove('mobile-show');
             overlay.classList.remove('show');
-            document.body.style.overflow = ''; // Restore scrolling
+            // Only prevent body scrolling when sidebar is open
+            if (window.innerWidth <= 768) {
+                document.body.style.overflow = '';
+            }
         }
     }
 
