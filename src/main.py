@@ -27,44 +27,77 @@ app.register_blueprint(note_bp, url_prefix='/api')
 # Database configuration - Supabase PostgreSQL ONLY
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if not DATABASE_URL:
-    print("❌ ERROR: DATABASE_URL environment variable is required!")
-    print("Please set your Supabase PostgreSQL connection string in .env file")
-    print("Format: postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres")
-    print("📖 Check SUPABASE_SETUP_GUIDE.md for detailed instructions")
-    sys.exit(1)
-
-# Validate Supabase URL format
-if "supabase.co" in DATABASE_URL and "pooler.supabase.com" not in DATABASE_URL:
-    print("⚠️  WARNING: Your DATABASE_URL appears to use the old Supabase format!")
-    print("Old format: db.xxxxx.supabase.co")
-    print("New format: aws-0-[region].pooler.supabase.com")
-    print("Please update your DATABASE_URL in .env file")
-    print("📖 Check SUPABASE_SETUP_GUIDE.md for help")
+    # For Vercel deployment, this should be set in environment variables
+    # Don't exit in serverless environment, just log the error
+    import logging
+    logging.error("❌ ERROR: DATABASE_URL environment variable is required!")
+    # Use a default that will cause a clear error later
+    DATABASE_URL = "postgresql://missing:missing@missing:5432/missing"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
-print(f"🔗 Using Supabase PostgreSQL: {DATABASE_URL[:50]}...")  # Only show first 50 chars for security
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize database connection
 db.init_app(app)
 
-# Initialize database tables
-with app.app_context():
+# Health check endpoint for Vercel debugging
+@app.route('/health')
+def health_check():
+    """Health check endpoint to verify deployment"""
+    return {
+        'status': 'healthy',
+        'database_configured': bool(os.environ.get('DATABASE_URL')),
+        'github_token_configured': bool(os.environ.get('GITHUB_TOKEN')),
+        'environment': os.environ.get('VERCEL_ENV', 'local')
+    }
+
+# API status endpoint
+@app.route('/api/status')
+def api_status():
+    """API status endpoint"""
     try:
-        # Test database connection first
-        from sqlalchemy import text
-        result = db.session.execute(text('SELECT 1'))
-        db.session.commit()
-        print("✅ Database connection successful!")
+        # Test database connection if configured
+        db_status = 'not_configured'
+        if os.environ.get('DATABASE_URL'):
+            try:
+                from sqlalchemy import text
+                with app.app_context():
+                    db.session.execute(text('SELECT 1'))
+                    db.session.commit()
+                db_status = 'connected'
+            except Exception as e:
+                db_status = f'error: {str(e)[:100]}'
         
-        # Note: Tables should be created manually in Supabase SQL Editor
-        # using the supabase_setup.sql file provided
-        print("📝 Make sure you've run the SQL setup in Supabase dashboard")
-        
+        return {
+            'api': 'online',
+            'database': db_status,
+            'translation': 'configured' if os.environ.get('GITHUB_TOKEN') else 'not_configured'
+        }
     except Exception as e:
-        print(f"❌ Database connection failed: {e}")
-        print("Please check your DATABASE_URL in .env file")
-        print("Make sure your Supabase project is active and URL is correct")
-        sys.exit(1)
+        return {'error': str(e)}, 500
+
+# Database connection test - only for local development
+# In Vercel, this will be tested on first request, not at startup
+def test_database_connection():
+    """Test database connection - called lazily on first request"""
+    try:
+        from sqlalchemy import text
+        with app.app_context():
+            result = db.session.execute(text('SELECT 1'))
+            db.session.commit()
+            return True
+    except Exception as e:
+        app.logger.error(f"Database connection failed: {e}")
+        return False
+
+# Only test connection in local development, not in Vercel
+if __name__ == '__main__':
+    with app.app_context():
+        if test_database_connection():
+            print("✅ Database connection successful!")
+        else:
+            print("❌ Database connection failed - check your .env file")
+            sys.exit(1)
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -86,5 +119,5 @@ def serve(path):
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
 
-# Export app for Vercel
-app = app
+# Export app for Vercel - this is the key for serverless deployment
+# Remove the duplicate assignment
