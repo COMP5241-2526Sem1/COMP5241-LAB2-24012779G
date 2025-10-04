@@ -471,19 +471,22 @@ class NoteTaker {
 
             const result = await response.json();
             
+            // Handle different response structures
+            const translations = result.translations || result;
+            
             // Update current note with translations
-            this.currentNote.title_zh = result.translations.title_zh;
-            this.currentNote.content_zh = result.translations.content_zh;
+            this.currentNote.title_zh = translations.title_zh;
+            this.currentNote.content_zh = translations.content_zh;
             
             // Update the note in our local array
             const noteIndex = this.notes.findIndex(n => n.id === this.currentNote.id);
             if (noteIndex >= 0) {
-                this.notes[noteIndex].title_zh = result.translations.title_zh;
-                this.notes[noteIndex].content_zh = result.translations.content_zh;
+                this.notes[noteIndex].title_zh = translations.title_zh;
+                this.notes[noteIndex].content_zh = translations.content_zh;
             }
             
             // Show translation section
-            this.displayTranslation(result.translations.title_zh, result.translations.content_zh);
+            this.displayTranslation(translations.title_zh, translations.content_zh);
             this.showMessage('Translation completed successfully!', 'success');
             
         } catch (error) {
@@ -583,9 +586,12 @@ class NoteTaker {
     }
 }
 
+// Global variable to make noteTaker accessible to inline onclick handlers
+let noteTaker;
+
 // Initialize the app when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    const noteTaker = new NoteTaker();
+    noteTaker = new NoteTaker();
 
     // Add event listeners for new functionality
     document.getElementById('analyzeBtn').addEventListener('click', () => {
