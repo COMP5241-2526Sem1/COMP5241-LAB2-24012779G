@@ -13,9 +13,16 @@ This is a Flask-based note-taking web application with a SQLAlchemy backend and 
 ## Critical Patterns
 
 ### Database Setup
-- Database path is `ROOT_DIR/database/app.db` (repository root, not src/)
+- **Production**: Uses Supabase PostgreSQL via `DATABASE_URL` environment variable
+- **Development**: Falls back to SQLite at `ROOT_DIR/database/app.db` if no `DATABASE_URL`
 - `db` instance is imported from `src.models.user`, NOT instantiated in models
 - All models must import: `from src.models.user import db`
+- Environment variables loaded via `python-dotenv`
+
+### Deployment Configuration
+- **Vercel**: Configured via `vercel.json` with serverless Python runtime
+- **Environment Variables**: `DATABASE_URL`, `SECRET_KEY` set in Vercel dashboard
+- **Local Development**: Uses `.env` file (copy from `.env.example`)
 
 ### API Structure
 - All routes use Flask blueprints with `/api` prefix
@@ -36,10 +43,16 @@ This is a Flask-based note-taking web application with a SQLAlchemy backend and 
 
 ## Development Workflow
 
-**Run locally:**
+**Local setup:**
 ```bash
-python src/main.py
-# App runs on http://localhost:5001
+cp .env.example .env  # Add your Supabase credentials
+pip install -r requirements.txt
+python src/main.py    # App runs on http://localhost:5001
+```
+
+**Deploy to Vercel:**
+```bash
+vercel  # Follow prompts, set DATABASE_URL and SECRET_KEY in dashboard
 ```
 
 **Key files to modify:**

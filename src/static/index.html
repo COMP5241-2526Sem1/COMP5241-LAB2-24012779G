@@ -153,6 +153,48 @@
             margin-top: 5px;
         }
 
+        .note-translation {
+            font-size: 13px;
+            color: #007bff;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e9ecef;
+            font-style: italic;
+        }
+
+        .note-translation .zh-title {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .note-translation .zh-content {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .translate-btn {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: background 0.2s ease;
+        }
+
+        .translate-btn:hover {
+            background: #138496;
+        }
+
+        .translate-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
         .editor-header {
             display: flex;
             justify-content: space-between;
@@ -438,6 +480,16 @@
                         <div class="note-title">${this.escapeHtml(note.title || 'Untitled')}</div>
                         <div class="note-preview">${this.escapeHtml(note.content || 'No content')}</div>
                         <div class="note-date">${this.formatDate(note.updated_at)}</div>
+                        ${note.title_zh || note.content_zh ? `
+                            <div class="note-translation">
+                                ${note.title_zh ? `<div class="zh-title">${this.escapeHtml(note.title_zh)}</div>` : ''}
+                                ${note.content_zh ? `<div class="zh-content">${this.escapeHtml(note.content_zh)}</div>` : ''}
+                            </div>
+                        ` : `
+                            <button class="translate-btn" onclick="event.stopPropagation(); noteTaker.translateNote(${note.id}, this)">
+                                🌐 Translate to Chinese
+                            </button>
+                        `}
                     </div>
                 `).join('');
             }
@@ -526,7 +578,11 @@
                         });
                     }
 
-                    if (!response.ok) throw new Error('Failed to save note');
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        const errorMessage = errorData.error || `HTTP ${response.status}: ${response.statusText}`;
+                        throw new Error(errorMessage);
+                    }
 
                     const savedNote = await response.json();
                     this.currentNote = savedNote;
@@ -569,6 +625,41 @@
                     this.showMessage('Note deleted successfully!', 'success');
                 } catch (error) {
                     this.showMessage(`Error deleting note: ${error.message}`, 'error');
+                }
+            }
+
+            async translateNote(noteId, button) {
+                if (!button) return;
+                
+                // Disable button and show loading state
+                button.disabled = true;
+                button.textContent = '🔄 Translating...';
+                
+                try {
+                    const response = await fetch(`/api/notes/${noteId}/translate`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    if (!response.ok) throw new Error('Translation failed');
+
+                    const result = await response.json();
+                    
+                    // Update the note in our local array
+                    const noteIndex = this.notes.findIndex(n => n.id === noteId);
+                    if (noteIndex >= 0) {
+                        this.notes[noteIndex].title_zh = result.title_zh;
+                        this.notes[noteIndex].content_zh = result.content_zh;
+                    }
+                    
+                    // Re-render the notes list to show translations
+                    this.renderNotesList();
+                    this.showMessage('Translation completed!', 'success');
+                    
+                } catch (error) {
+                    button.disabled = false;
+                    button.textContent = '🌐 Translate to Chinese';
+                    this.showMessage(`Translation failed: ${error.message}`, 'error');
                 }
             }
 
