@@ -186,26 +186,70 @@ note-taking-app/
 │   │   └── tag.py           # Tag model for auto-tagging system
 │   ├── routes/
 │   │   ├── user.py          # User API routes
-│   │   ├── note.py          # Note API endpoints + translation
-│   │   └── enhanced.py      # New AI features API (analysis, tags, export)
+│   │   ├── note.py          # Note API endpoints + AI translation
+│   │   └── enhanced.py      # AI features API (analysis, tags, export)
 │   ├── services/
 │   │   ├── translation.py   # GitHub Models API translation service
 │   │   ├── ai_analysis.py   # AI-powered auto-tagging and suggestions
 │   │   └── export_service.py # Multi-format export (PDF, Markdown, DOCX)
 │   ├── static/
-│   │   ├── index.html       # Enhanced frontend with AI features UI
+│   │   ├── index.html       # Clean HTML structure
+│   │   ├── styles.css       # Professional CSS design system
+│   │   ├── app.js           # Complete JavaScript application logic
 │   │   └── favicon.ico      # Application icon
 │   └── main.py              # Flask application entry point
+├── api/                     # Vercel API endpoints (serverless functions)
+├── .github/
+│   └── copilot-instructions.md # AI coding guidelines for development
 ├── .venv/                   # Python virtual environment
 ├── .env                     # Environment variables (Supabase, GitHub token)
-├── requirements.txt         # Python dependencies (includes new AI packages)
+├── .env.example             # Environment variables template
+├── requirements.txt         # Python dependencies with AI packages
 ├── database_migration_tags.sql # Database migration for AI features
-├── vercel.json              # Vercel deployment configuration
-├── start.cmd                # Windows startup script
-├── setup.cmd                # Windows setup script
 ├── supabase_setup.sql       # Database schema for Supabase
-└── README.md               # This file
+├── vercel.json              # Vercel deployment configuration
+├── setup.cmd                # Windows setup script
+├── start.cmd                # Windows startup script
+├── start-simple.cmd         # Simple startup script
+├── DEPLOYMENT.md            # Deployment instructions
+├── VERCEL_DEPLOYMENT.md     # Vercel-specific deployment guide
+├── CONTRIBUTING.md          # Contribution guidelines
+├── SECURITY.md              # Security policies
+├── LICENSE                  # Project license
+├── lab2_writeup.md          # Lab assignment writeup
+└── README.md               # This comprehensive documentation
 ```
+
+### 📄 File Details
+
+#### Frontend Architecture (Separated Design)
+- **`index.html`** : Clean semantic HTML structure
+  - Modal systems for AI features and export
+  - Proper form elements and accessibility
+  - External resource references for maintainability
+
+- **`styles.css`** : Professional design system
+  - CSS variables for consistent theming
+  - Modern gradient designs and animations
+  - Responsive layouts and component styling
+  - Dark mode ready with professional shadows
+
+- **`app.js`** : Complete application logic
+  - NoteTaker class with global accessibility
+  - AI translation and analysis features
+  - Auto-save functionality with debounced saves
+  - Export capabilities (PDF, Markdown, DOCX)
+
+#### Backend Architecture
+- **`main.py`**: Flask app with static file serving and database initialization
+- **`models/`**: SQLAlchemy models with shared database instance
+- **`routes/`**: Flask blueprints with `/api` prefix for RESTful endpoints
+- **`services/`**: AI and business logic services for translation, analysis, and export
+
+#### AI & Infrastructure
+- **GitHub Models API**: GPT-4o-mini for translation and analysis
+- **Supabase PostgreSQL**: Cloud database with advanced schema
+- **Vercel Deployment**: Serverless Python runtime configuration
 
 ## 🔧 Local Development Setup
 
