@@ -1,5 +1,6 @@
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=20890465)
 # NoteTaker - AI-Powered Personal Note Management Application
+
+⭐ **Star this repository if you find it useful!**
 
 A modern, responsive web application for managing personal notes with **AI translation capabilities** and cloud database integration.
 
@@ -43,6 +44,24 @@ Chinese: "欢迎使用记事本"
 English: "This is a test note for the translation feature."
 Chinese: "这是翻译功能的测试笔记。"
 ```
+
+## 🌟 **This Project is Open Source!**
+
+Feel free to:
+- ⭐ **Star this repository** if you find it useful
+- 🐛 **Report issues** if you find bugs
+- 🔄 **Submit pull requests** for improvements
+- 📧 **Contact me** for collaboration opportunities
+
+## 👨‍💻 **About This Project**
+
+This NoteTaker application demonstrates:
+- **🎯 Full-stack web development** with Flask and PostgreSQL
+- **🤖 AI integration** using GitHub Models API for translation
+- **☁️ Cloud deployment** with Vercel and Supabase
+- **⚡ Modern web technologies** and best practices
+- **🔄 Database migration** from SQLite to cloud PostgreSQL
+- **🎨 Responsive UI design** with modern CSS and JavaScript
 
 ## ⚡ Quick Start Guide
 
@@ -466,4 +485,16 @@ Potential improvements for future versions:
 ---
 
 **Built with ❤️ using Flask, Supabase, GitHub Models API, and modern web technologies**
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## ⭐ Show Your Support
+
+If this project helped you, please consider giving it a ⭐ star on GitHub!
 
