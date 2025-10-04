@@ -24,17 +24,25 @@ CORS(app)
 app.register_blueprint(user_bp, url_prefix='/api')
 app.register_blueprint(note_bp, url_prefix='/api')
 
-# Database configuration
+# Database configuration - Supabase PostgreSQL ONLY
 DATABASE_URL = os.environ.get('DATABASE_URL')
-if DATABASE_URL:
-    # Use PostgreSQL (Supabase) for production
-    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
-else:
-    # Fallback to SQLite for local development
-    ROOT_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-    DB_PATH = os.path.join(ROOT_DIR, 'database', 'app.db')
-    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_PATH}"
+if not DATABASE_URL:
+    print("❌ ERROR: DATABASE_URL environment variable is required!")
+    print("Please set your Supabase PostgreSQL connection string in .env file")
+    print("Format: postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres")
+    print("📖 Check SUPABASE_SETUP_GUIDE.md for detailed instructions")
+    sys.exit(1)
+
+# Validate Supabase URL format
+if "supabase.co" in DATABASE_URL and "pooler.supabase.com" not in DATABASE_URL:
+    print("⚠️  WARNING: Your DATABASE_URL appears to use the old Supabase format!")
+    print("Old format: db.xxxxx.supabase.co")
+    print("New format: aws-0-[region].pooler.supabase.com")
+    print("Please update your DATABASE_URL in .env file")
+    print("📖 Check SUPABASE_SETUP_GUIDE.md for help")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+print(f"🔗 Using Supabase PostgreSQL: {DATABASE_URL[:50]}...")  # Only show first 50 chars for security
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
@@ -42,10 +50,21 @@ db.init_app(app)
 # Initialize database tables
 with app.app_context():
     try:
-        db.create_all()
-        print("Database tables created successfully")
+        # Test database connection first
+        from sqlalchemy import text
+        result = db.session.execute(text('SELECT 1'))
+        db.session.commit()
+        print("✅ Database connection successful!")
+        
+        # Note: Tables should be created manually in Supabase SQL Editor
+        # using the supabase_setup.sql file provided
+        print("📝 Make sure you've run the SQL setup in Supabase dashboard")
+        
     except Exception as e:
-        print(f"Database initialization error: {e}")
+        print(f"❌ Database connection failed: {e}")
+        print("Please check your DATABASE_URL in .env file")
+        print("Make sure your Supabase project is active and URL is correct")
+        sys.exit(1)
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
