@@ -8,7 +8,9 @@ from flask_cors import CORS
 from src.models.user import db
 from src.routes.user import user_bp
 from src.routes.note import note_bp
+from src.routes.enhanced import enhanced_bp  # Import new enhanced routes
 from src.models.note import Note
+from src.models.tag import Tag, NoteTag  # Import new models
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -23,6 +25,7 @@ CORS(app)
 # register blueprints
 app.register_blueprint(user_bp, url_prefix='/api')
 app.register_blueprint(note_bp, url_prefix='/api')
+app.register_blueprint(enhanced_bp, url_prefix='/api')  # Register enhanced features
 
 # Database configuration - Supabase PostgreSQL ONLY
 DATABASE_URL = os.environ.get('DATABASE_URL')

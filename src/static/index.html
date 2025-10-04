@@ -242,6 +242,26 @@
             transform: translateY(-1px);
         }
 
+        .btn-analyze {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-analyze:hover {
+            background: #138496;
+            transform: translateY(-1px);
+        }
+
+        .btn-export {
+            background: #fd7e14;
+            color: white;
+        }
+
+        .btn-export:hover {
+            background: #e8630b;
+            transform: translateY(-1px);
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -325,6 +345,202 @@
             border: 1px solid #c3e6cb;
         }
 
+        /* Tags Styles */
+        .tags-container {
+            margin: 15px 0;
+        }
+
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .tag {
+            background: #6c757d;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .tag.auto-tag {
+            background: #17a2b8;
+        }
+
+        .tag.user-tag {
+            background: #28a745;
+        }
+
+        /* AI Suggestions Panel */
+        .suggestions-panel {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .suggestions-panel.show {
+            display: block;
+        }
+
+        .suggestions-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .suggestion-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .suggestion-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .suggestion-type {
+            font-weight: 600;
+            color: #6c757d;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        /* Export Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .export-options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .export-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .export-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .export-option input[type="radio"] {
+            margin-right: 12px;
+        }
+
+        .export-info {
+            flex-grow: 1;
+        }
+
+        .export-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .export-description {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-modal.primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-modal.primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-modal.secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-modal.secondary:hover {
+            background: #5a6268;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .main-content {
@@ -387,6 +603,8 @@
                     <h2 class="editor-title" id="editorTitle">Select a note to edit</h2>
                     <div class="editor-actions" id="editorActions" style="display: none;">
                         <button class="btn btn-save" id="saveBtn">💾 Save</button>
+                        <button class="btn btn-analyze" id="analyzeBtn">🤖 AI Analyze</button>
+                        <button class="btn btn-export" id="exportBtn">📄 Export</button>
                         <button class="btn btn-delete" id="deleteBtn">🗑️ Delete</button>
                     </div>
                 </div>
@@ -402,6 +620,68 @@
                     <div class="form-group">
                         <label class="form-label" for="noteContent">Content</label>
                         <textarea class="form-textarea" id="noteContent" placeholder="Start writing your note..."></textarea>
+                    </div>
+
+                    <!-- Tags Section -->
+                    <div class="tags-container">
+                        <label class="form-label">Tags</label>
+                        <div class="tags-list" id="tagsList"></div>
+                    </div>
+
+                    <!-- AI Suggestions Panel -->
+                    <div class="suggestions-panel" id="suggestionsPanel">
+                        <div class="suggestions-title">🤖 AI Writing Suggestions</div>
+                        <div id="suggestionsContent"></div>
+                    </div>
+                </div>
+
+                <!-- Export Modal -->
+                <div class="modal" id="exportModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Export Notes</h3>
+                            <button class="close-btn" onclick="noteTaker.closeExportModal()">&times;</button>
+                        </div>
+                        <div class="export-options">
+                            <label class="export-option">
+                                <input type="radio" name="exportFormat" value="markdown" checked>
+                                <div class="export-info">
+                                    <div class="export-name">📝 Markdown</div>
+                                    <div class="export-description">Plain text with formatting</div>
+                                </div>
+                            </label>
+                            <label class="export-option">
+                                <input type="radio" name="exportFormat" value="pdf">
+                                <div class="export-info">
+                                    <div class="export-name">📄 PDF</div>
+                                    <div class="export-description">Portable Document Format</div>
+                                </div>
+                            </label>
+                            <label class="export-option">
+                                <input type="radio" name="exportFormat" value="docx">
+                                <div class="export-info">
+                                    <div class="export-name">📊 Word Document</div>
+                                    <div class="export-description">Microsoft Word format</div>
+                                </div>
+                            </label>
+                            <label class="export-option">
+                                <input type="radio" name="exportFormat" value="all">
+                                <div class="export-info">
+                                    <div class="export-name">📦 All Formats</div>
+                                    <div class="export-description">ZIP file with all formats</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div style="margin: 15px 0;">
+                            <label>
+                                <input type="checkbox" id="includeTranslations" checked>
+                                Include Chinese translations
+                            </label>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn-modal primary" onclick="noteTaker.performExport()">📥 Export</button>
+                            <button class="btn-modal secondary" onclick="noteTaker.closeExportModal()">Cancel</button>
+                        </div>
                     </div>
                 </div>
 
@@ -721,10 +1001,208 @@
                     return date.toLocaleDateString();
                 }
             }
+
+            // AI Analysis Methods
+            async analyzeNote(noteId) {
+                if (!noteId) {
+                    this.showMessage('Please save the note first before analyzing', 'error');
+                    return;
+                }
+
+                const analyzeBtn = document.getElementById('analyzeBtn');
+                const originalText = analyzeBtn.textContent;
+                analyzeBtn.disabled = true;
+                analyzeBtn.textContent = '🔄 Analyzing...';
+
+                try {
+                    const response = await fetch(`/api/notes/${noteId}/analyze`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.showMessage('Note analyzed successfully!', 'success');
+                        this.displayTags(data.auto_tags || []);
+                        this.displaySuggestions(data.suggestions || {});
+                        
+                        // Update current note with AI data
+                        if (this.currentNote) {
+                            this.currentNote.auto_tags = data.auto_tags;
+                            this.currentNote.ai_suggestions = data.suggestions;
+                        }
+                    } else {
+                        throw new Error(data.error || 'Analysis failed');
+                    }
+                } catch (error) {
+                    console.error('Analysis error:', error);
+                    this.showMessage(`Analysis failed: ${error.message}`, 'error');
+                } finally {
+                    analyzeBtn.disabled = false;
+                    analyzeBtn.textContent = originalText;
+                }
+            }
+
+            displayTags(tags) {
+                const tagsList = document.getElementById('tagsList');
+                if (!tags || tags.length === 0) {
+                    tagsList.innerHTML = '<span style="color: #6c757d; font-style: italic;">No tags generated</span>';
+                    return;
+                }
+
+                tagsList.innerHTML = tags.map(tag => 
+                    `<span class="tag auto-tag" title="AI-generated tag">${this.escapeHtml(tag)}</span>`
+                ).join('');
+            }
+
+            displaySuggestions(suggestions) {
+                const panel = document.getElementById('suggestionsPanel');
+                const content = document.getElementById('suggestionsContent');
+
+                if (!suggestions || Object.keys(suggestions).length === 0) {
+                    panel.classList.remove('show');
+                    return;
+                }
+
+                let html = '';
+
+                if (suggestions.improvements && suggestions.improvements.length > 0) {
+                    html += '<div class="suggestion-item">';
+                    html += '<div class="suggestion-type">Improvements</div>';
+                    html += suggestions.improvements.map(imp => `<div>• ${this.escapeHtml(imp)}</div>`).join('');
+                    html += '</div>';
+                }
+
+                if (suggestions.suggested_edits && suggestions.suggested_edits.length > 0) {
+                    html += '<div class="suggestion-item">';
+                    html += '<div class="suggestion-type">Suggested Edits</div>';
+                    html += suggestions.suggested_edits.map(edit => `<div>• ${this.escapeHtml(edit)}</div>`).join('');
+                    html += '</div>';
+                }
+
+                if (suggestions.completion_suggestions && suggestions.completion_suggestions.length > 0) {
+                    html += '<div class="suggestion-item">';
+                    html += '<div class="suggestion-type">Content Suggestions</div>';
+                    html += suggestions.completion_suggestions.map(sugg => `<div>• ${this.escapeHtml(sugg)}</div>`).join('');
+                    html += '</div>';
+                }
+
+                if (suggestions.tone_analysis) {
+                    html += '<div class="suggestion-item">';
+                    html += '<div class="suggestion-type">Tone Analysis</div>';
+                    html += `<div>Tone: ${this.escapeHtml(suggestions.tone_analysis)}</div>`;
+                    if (suggestions.readability_score) {
+                        html += `<div>Readability: ${this.escapeHtml(suggestions.readability_score)}</div>`;
+                    }
+                    html += '</div>';
+                }
+
+                content.innerHTML = html;
+                panel.classList.add('show');
+            }
+
+            // Export Methods
+            openExportModal() {
+                document.getElementById('exportModal').classList.add('show');
+            }
+
+            closeExportModal() {
+                document.getElementById('exportModal').classList.remove('show');
+            }
+
+            async performExport() {
+                const selectedFormat = document.querySelector('input[name="exportFormat"]:checked').value;
+                const includeTranslations = document.getElementById('includeTranslations').checked;
+
+                try {
+                    const exportData = {
+                        note_ids: this.currentNote ? [this.currentNote.id] : [], // Export current note or all if none selected
+                        include_translations: includeTranslations
+                    };
+
+                    const response = await fetch(`/api/export/${selectedFormat}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(exportData)
+                    });
+
+                    if (response.ok) {
+                        // Handle file download
+                        const blob = await response.blob();
+                        const contentDisposition = response.headers.get('Content-Disposition');
+                        const filename = contentDisposition ? 
+                            contentDisposition.split('filename=')[1].replace(/"/g, '') : 
+                            `notes_export_${new Date().toISOString().slice(0,10)}.${selectedFormat}`;
+
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+
+                        this.showMessage('Export completed successfully!', 'success');
+                        this.closeExportModal();
+                    } else {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Export failed');
+                    }
+                } catch (error) {
+                    console.error('Export error:', error);
+                    this.showMessage(`Export failed: ${error.message}`, 'error');
+                }
+            }
         }
 
         // Initialize the app
         const noteTaker = new NoteTaker();
+
+        // Add event listeners for new functionality
+        document.getElementById('analyzeBtn').addEventListener('click', () => {
+            if (noteTaker.currentNote && noteTaker.currentNote.id) {
+                noteTaker.analyzeNote(noteTaker.currentNote.id);
+            } else {
+                noteTaker.showMessage('Please save the note first before analyzing', 'error');
+            }
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            noteTaker.openExportModal();
+        });
+
+        document.getElementById('closeExportModal').addEventListener('click', () => {
+            noteTaker.closeExportModal();
+        });
+
+        document.getElementById('performExport').addEventListener('click', () => {
+            noteTaker.performExport();
+        });
+
+        document.getElementById('closeSuggestions').addEventListener('click', () => {
+            document.getElementById('suggestionsPanel').classList.remove('show');
+        });
+
+        // Close modals when clicking outside
+        document.getElementById('exportModal').addEventListener('click', (e) => {
+            if (e.target.id === 'exportModal') {
+                noteTaker.closeExportModal();
+            }
+        });
+
+        // Handle escape key for closing modals/panels
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                noteTaker.closeExportModal();
+                document.getElementById('suggestionsPanel').classList.remove('show');
+            }
+        });
     </script>
 </body>
 </html>
