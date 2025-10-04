@@ -171,7 +171,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h3 class="modal-title">Export Notes</h3>
-                            <button class="close-btn" onclick="noteTaker.closeExportModal()">&times;</button>
+                            <button class="close-btn" id="closeExportModal" onclick="noteTaker.closeExportModal()">&times;</button>
                         </div>
                         <div class="export-options">
                             <label class="export-option">
@@ -210,15 +210,10 @@
                             </label>
                         </div>
                         <div class="modal-actions">
-                            <button class="btn-modal primary" onclick="noteTaker.performExport()">📥 Export</button>
+                            <button class="btn-modal primary" id="performExport" onclick="noteTaker.performExport()">📥 Export</button>
                             <button class="btn-modal secondary" onclick="noteTaker.closeExportModal()">Cancel</button>
                         </div>
                     </div>
-                </div>
-
-                <div class="empty-state" id="emptyState">
-                    <h3>Welcome to NoteTaker!</h3>
-                    <p>Select an existing note or create a new one to get started.</p>
                 </div>
             </div>
         </div>
@@ -780,55 +775,57 @@
             }
         }
 
-        // Initialize the app
-        const noteTaker = new NoteTaker();
+        // Initialize the app when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const noteTaker = new NoteTaker();
 
-        // Add event listeners for new functionality
-        document.getElementById('analyzeBtn').addEventListener('click', () => {
-            if (noteTaker.currentNote && noteTaker.currentNote.id) {
-                noteTaker.analyzeNote(noteTaker.currentNote.id);
-            } else {
-                noteTaker.showMessage('Please save the note first before analyzing', 'error');
-            }
-        });
+            // Add event listeners for new functionality
+            document.getElementById('analyzeBtn').addEventListener('click', () => {
+                if (noteTaker.currentNote && noteTaker.currentNote.id) {
+                    noteTaker.analyzeNote(noteTaker.currentNote.id);
+                } else {
+                    noteTaker.showMessage('Please save the note first before analyzing', 'error');
+                }
+            });
 
-        document.getElementById('exportBtn').addEventListener('click', () => {
-            noteTaker.openExportModal();
-        });
+            document.getElementById('exportBtn').addEventListener('click', () => {
+                noteTaker.openExportModal();
+            });
 
-        document.getElementById('translateBtn').addEventListener('click', () => {
-            if (noteTaker.currentNote && noteTaker.currentNote.id) {
-                noteTaker.translateCurrentNote();
-            } else {
-                noteTaker.showMessage('Please save the note first before translating', 'error');
-            }
-        });
+            document.getElementById('translateBtn').addEventListener('click', () => {
+                if (noteTaker.currentNote && noteTaker.currentNote.id) {
+                    noteTaker.translateCurrentNote();
+                } else {
+                    noteTaker.showMessage('Please save the note first before translating', 'error');
+                }
+            });
 
-        document.getElementById('closeExportModal').addEventListener('click', () => {
-            noteTaker.closeExportModal();
-        });
-
-        document.getElementById('performExport').addEventListener('click', () => {
-            noteTaker.performExport();
-        });
-
-        document.getElementById('closeSuggestions').addEventListener('click', () => {
-            document.getElementById('suggestionsPanel').classList.remove('show');
-        });
-
-        // Close modals when clicking outside
-        document.getElementById('exportModal').addEventListener('click', (e) => {
-            if (e.target.id === 'exportModal') {
+            document.getElementById('closeExportModal').addEventListener('click', () => {
                 noteTaker.closeExportModal();
-            }
-        });
+            });
 
-        // Handle escape key for closing modals/panels
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                noteTaker.closeExportModal();
+            document.getElementById('performExport').addEventListener('click', () => {
+                noteTaker.performExport();
+            });
+
+            document.getElementById('closeSuggestions').addEventListener('click', () => {
                 document.getElementById('suggestionsPanel').classList.remove('show');
-            }
+            });
+
+            // Close modals when clicking outside
+            document.getElementById('exportModal').addEventListener('click', (e) => {
+                if (e.target.id === 'exportModal') {
+                    noteTaker.closeExportModal();
+                }
+            });
+
+            // Handle escape key for closing modals/panels
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    noteTaker.closeExportModal();
+                    document.getElementById('suggestionsPanel').classList.remove('show');
+                }
+            });
         });
     </script>
 </body>
