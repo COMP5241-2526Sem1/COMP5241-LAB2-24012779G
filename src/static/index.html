@@ -779,12 +779,21 @@
                 if (!note) return;
 
                 this.currentNote = note;
+                this.clearAIElements(); // Clear tags and suggestions from previous note
                 this.showEditor();
                 this.renderNotesList(); // Re-render to update active state
                 
                 document.getElementById('noteTitle').value = note.title || '';
                 document.getElementById('noteContent').value = note.content || '';
                 document.getElementById('editorTitle').textContent = note.title || 'Untitled Note';
+                
+                // Display existing AI data if available
+                if (note.auto_tags && note.auto_tags.length > 0) {
+                    this.displayTags(note.auto_tags);
+                }
+                if (note.ai_suggestions && Object.keys(note.ai_suggestions).length > 0) {
+                    this.displaySuggestions(note.ai_suggestions);
+                }
             }
 
             createNewNote() {
@@ -796,6 +805,7 @@
                     updated_at: new Date().toISOString()
                 };
                 
+                this.clearAIElements(); // Clear tags and suggestions
                 this.showEditor();
                 document.getElementById('noteTitle').value = '';
                 document.getElementById('noteContent').value = '';
@@ -1102,6 +1112,19 @@
 
                 content.innerHTML = html;
                 panel.classList.add('show');
+            }
+
+            // Clear AI elements when switching notes
+            clearAIElements() {
+                // Clear tags
+                const tagsList = document.getElementById('tagsList');
+                tagsList.innerHTML = '';
+                
+                // Clear and hide suggestions panel
+                const suggestionsPanel = document.getElementById('suggestionsPanel');
+                suggestionsPanel.classList.remove('show');
+                const suggestionsContent = document.getElementById('suggestionsContent');
+                suggestionsContent.innerHTML = '';
             }
 
             // Export Methods
