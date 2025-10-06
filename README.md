@@ -149,7 +149,7 @@ This NoteTaker application demonstrates:
 
 ## 🚀 Live Demo
 
-The application is deployed and accessible at: **https://3dhkilc88dkk.manus.space**
+The application is deployed and accessible at: **https://comp-5241-lab-2-24012779-g.vercel.app**
 
 ## 🛠 Technology Stack
 
