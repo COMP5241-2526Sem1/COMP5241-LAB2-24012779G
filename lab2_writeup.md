@@ -70,6 +70,15 @@ This lab demonstrates the power of AI-driven development. **100% of the implemen
 
 ## Conversation Examples
 
+**Database Migration:**
+```
+Me: "i need to change to database from local to use supabase postgresql, and i need to deploy the app to Vercel cloud platform"
+
+AI: [Automatically handled Supabase migration, fixed connection strings, configured Vercel deployment]
+```
+
+![Database Migration Prompt](prompt_1.png)
+
 **Initial Translation Request:**
 ```
 Me: "can you help me add a translate function which using AI model to translate the content from english to chinese"
@@ -77,12 +86,7 @@ Me: "can you help me add a translate function which using AI model to translate 
 AI: [Implemented complete translation system with GitHub Models API, database schema updates, frontend UI, and error handling]
 ```
 
-**Database Migration:**
-```
-Me: "i need to change to database from local to use supabase postgresql, and i need to deploy the app to Vercel cloud platform"
-
-AI: [Automatically handled Supabase migration, fixed connection strings, configured Vercel deployment]
-```
+![Translation Request Prompt](prompt_2.png)
 
 **Advanced Features Request:**
 ```
@@ -94,12 +98,16 @@ Me: "help me implement the below new functions:
 AI: [Built complete database schema, AI analysis service, export functionality, enhanced UI]
 ```
 
+![Advanced Features Request Prompt](prompt_3.png)
+
 **Documentation Request:**
 ```
 Me: "help me update the readme if needed"
 
 AI: [Created comprehensive README with all new features documented]
 ```
+
+![Documentation Request Prompt](prompt_4.png)
 
 ## 🔮 Conclusion
 
